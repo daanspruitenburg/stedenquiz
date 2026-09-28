@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stedenquiz</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f5f7fa;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+p {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    vertical-align: top;
+}
+
+th {
+    background-color: #2c3e50;
+    color: white;
+}
+
+select {
+    width: 100%;
+    padding: 6px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+#score {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.result {
+    font-size: 14px;
+    line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌍 Stedenquiz</h1>
+
+<p>
+Kies bij elke stad het juiste land, de juiste bezienswaardigheid en het juiste gerecht.
+</p>
+
+<table id="quizTable">
+    <thead>
+        <tr>
+            <th>Stad</th>
+            <th>Land</th>
+            <th>Bezienswaardigheid</th>
+            <th>Gerecht</th>
+            <th>Resultaat</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<button onclick="checkAnswers()">✅ Nakijken</button>
+
+<div id="score"></div>
+
+<script>
+
+const data = [
+{
+city:"Parijs",
+country:"Frankrijk",
+sight:"Eiffeltoren",
+food:"Croissant"
+},
+{
+city:"Rome",
+country:"Italië",
+sight:"Colosseum",
+food:"Pizza"
+},
+{
+city:"Londen",
+country:"Verenigd Koninkrijk",
+sight:"Big Ben",
+food:"Fish and chips"
+},
+{
+city:"Berlijn",
+country:"Duitsland",
+sight:"Brandenburger Tor",
+food:"Curryworst"
+},
+{
+city:"Amsterdam",
+country:"Nederland",
+sight:"Rijksmuseum",
+food:"Stroopwafel"
+},
+{
+city:"Athene",
+country:"Griekenland",
+sight:"Akropolis",
+food:"Gyros"
+},
+{
+city:"Madrid",
+country:"Spanje",
+sight:"Plaza Mayor",
+food:"Paella"
+},
+{
+city:"Stockholm",
+country:"Zweden",
+sight:"Gamla Stan",
+food:"Köttbullar"
+},
+{
+city:"Praag",
+country:"Tsjechië",
+sight:"Karelsbrug",
+food:"Trdelník"
+},
+{
+city:"New York",
+country:"Verenigde Staten",
+sight:"Vrijheidsbeeld",
+food:"Hamburger"
+}
+];
+
+let countries = [
+"Frankrijk",
+"Italië",
+"Verenigd Koninkrijk",
+"Duitsland",
+"Nederland",
+"Griekenland",
+"Spanje",
+"Zweden",
+"Tsjechië",
+"Verenigde Staten"
+];
+
+let sights = [
+"Eiffeltoren",
+"Colosseum",
+"Big Ben",
+"Brandenburger Tor",
+"Rijksmuseum",
+"Akropolis",
+"Plaza Mayor",
+"Gamla Stan",
+"Karelsbrug",
+"Vrijheidsbeeld"
+];
+
+let foods = [
+"Croissant",
+"Pizza",
+"Fish and chips",
+"Curryworst",
+"Stroopwafel",
+"Gyros",
+"Paella",
+"Köttbullar",
+"Trdelník",
+"Hamburger"
+];
+
+countries.sort(() => Math.random() - 0.5);
+sights.sort(() => Math.random() - 0.5);
+foods.sort(() => Math.random() - 0.5);
+
+const tbody = document.querySelector("#quizTable tbody");
+
+data.forEach((item, i) => {
+
+const row = document.createElement("tr");
+
+row.innerHTML = `
+<td><strong>${item.city}</strong></td>
+
+<td>
+<select id="country${i}">
+<option value="">Kies...</option>
+${countries.map(c => `<option>${c}</option>`).join("")}
+</select>
+</td>
+
+<td>
+<select id="sight${i}">
+<option value="">Kies...</option>
+${sights.map(s => `<option>${s}</option>`).join("")}
+</select>
+</td>
+
+<td>
+<select id="food${i}">
+<option value="">Kies...</option>
+${foods.map(f => `<option>${f}</option>`).join("")}
+</select>
+</td>
+
+<td class="result" id="result${i}"></td>
+`;
+
+tbody.appendChild(row);
+});
+
+function checkAnswers() {
+
+let score = 0;
+
+data.forEach((item, i) => {
+
+const countryAnswer =
+document.getElementById(`country${i}`).value;
+
+const sightAnswer =
+document.getElementById(`sight${i}`).value;
+
+const foodAnswer =
+document.getElementById(`food${i}`).value;
+
+let resultText = "";
+
+if (countryAnswer === item.country) {
+    score++;
+    resultText += "✅ Land goed<br>";
+} else {
+    resultText += `❌ Land: ${item.country}<br>`;
+}
+
+if (sightAnswer === item.sight) {
+    score++;
+    resultText += "✅ Bezienswaardigheid goed<br>";
+} else {
+    resultText += `❌ Bezienswaardigheid: ${item.sight}<br>`;
+}
+
+if (foodAnswer === item.food) {
+    score++;
+    resultText += "✅ Gerecht goed";
+} else {
+    resultText += `❌ Gerecht: ${item.food}`;
+}
+
+document.getElementById(`result${i}`).innerHTML = resultText;
+
+});
+
+document.getElementById("score").innerHTML =
+`🎯 Eindscore: <strong>${score} van ${data.length * 3}</strong> punten`;
+
+window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth"
+});
+}
+
+</script>
+
+</body>
+</html>
